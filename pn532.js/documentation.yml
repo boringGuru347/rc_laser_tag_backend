@@ -1,0 +1,66 @@
+toc:
+  - name: Getting Started
+    description: |
+      See [README.md](https://github.com/taichunmin/pn532.js#readme) for getting started tutorial.
+  - name: Core
+    children:
+      - Pn532
+      - Packet
+      - Crypto1
+  - name: Plugin
+    children:
+      - Pn532Hf14a
+      - Pn532LoggerRxTx
+      - Pn532WebbleAdapter
+      - Pn532WebserialAdapter
+  - name: Example
+    children:
+      - name: M1 UID4B Writer
+        description: |
+          URL: <http://taichunmin.idv.tw/pn532.js/m1-uid4b-writer.html>
+
+          This tools can write 4 bytes UID to Chinese Magic Card (support UID and CUID) via Web Bluetooth or Web Serial.
+      - name: M1 EML Toolkit
+        description: |
+          URL: <http://taichunmin.idv.tw/pn532.js/m1-eml-toolkit.html>
+
+          This tools can read or write data from Mifare Classic 1k (support UID and CUID) via Web Bluetooth or Web Serial.
+      - name: M1 UID Scanner
+        description: |
+          URL: <http://taichunmin.idv.tw/pn532.js/m1-uid-scanner.html>
+
+          This tools can scan UID of NFC Type A Tags via Web Bluetooth or Web Serial.
+      - name: mfkey32v2 and mfkey64
+        description: |
+          URL: <http://taichunmin.idv.tw/pn532.js/mfkey.html>
+
+          An online tool for mfkey32v2 and mfkey64 that recover mifare key from encrypted data obtained from reader-only attack or sniff communications between reader and card.
+      - name: Key Detector for 北方智能卡
+        description: |
+          URL: <http://taichunmin.idv.tw/pn532.js/detector-shop143630998.html>
+
+          This tools is only support supercard [單卡嗅探王](https://lihi1.com/MAU73). It can change uid and type of supercard, or do reader-only attack to recover key.
+      - name: Key Detector for 福睿
+        description: |
+          URL: <http://taichunmin.idv.tw/pn532.js/detector-furui.html>
+
+          This tools is only support supercard [福睿偵測卡](https://lihi1.com/0vzx7). It can change uid and type of supercard, or do reader-only attack to recover key.
+  - name: other
+    children:
+      - Pn532Frame
+      - Pn532FrameAck
+      - Pn532FrameNormal
+      - Pn532FrameExtended
+  - name: modules
+    children:
+      - pn532.js/Packet
+      - pn532.js/plugin/Hf14a
+      - pn532.js/plugin/LoggerRxTx
+      - pn532.js/plugin/WebbleAdapter
+      - pn532.js/plugin/WebserialAdapter
+      - pn532.js/pn532
+      - pn532.js/utils
+  - name: typedef
+    children:
+      - Pn532Hf14a~MifareTarget
+      - Pn532~Gpio

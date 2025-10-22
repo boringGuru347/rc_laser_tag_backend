@@ -1,0 +1,28 @@
+{
+  "name": "lasertag-backend",
+  "version": "1.0.0",
+  "description": "Laser Tag event backend API for student lookup by roll number",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "seed": "node src/importData.js"
+  },
+  "keywords": [
+    "express",
+    "mongodb",
+    "lasertag",
+    "nitw",
+    "students"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.12.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.19.1"
+  }
+}

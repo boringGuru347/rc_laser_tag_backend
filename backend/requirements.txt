@@ -1,0 +1,90 @@
+# Backend runtime requirements and quick start
+
+This repository's `backend` folder is a Node.js (ESM) service that exposes a small Express API
+to look up students by roll number. The file below documents the runtime requirements,
+npm dependencies, environment variables, and quick commands a new user can follow to run
+the backend locally.
+
+-------------------------------------------------------------------------------
+1) Requirements
+-------------------------------------------------------------------------------
+- Node.js (LTS) installed. Node v16+ is compatible; use an up-to-date LTS release.
+- npm (comes with Node.js) or a compatible package manager (yarn, pnpm).
+- A running MongoDB server reachable from the machine (default: mongodb://127.0.0.1:27017).
+
+If you don't have MongoDB locally you can start one quickly with Docker (optional):
+
+    REM Example for Windows cmd.exe
+    docker run -d -p 27017:27017 --name lasertag-mongo mongo:6.0
+
+-------------------------------------------------------------------------------
+2) Node dependencies (from `backend/package.json`)
+-------------------------------------------------------------------------------
+- axios
+- cors
+- dotenv
+- express
+- mongodb
+- mongoose
+
+These are installed by running `npm install` inside the `backend` directory.
+
+-------------------------------------------------------------------------------
+3) Environment variables (create a `.env` file in `backend/`)
+-------------------------------------------------------------------------------
+The backend reads configuration from environment variables via `dotenv`. Create a file
+named `.env` in the `backend` folder (or set env vars in your shell) with values like:
+
+    MONGODB_URI=mongodb://127.0.0.1:27017
+    DB_NAME=lasertag
+    COLLECTION_NAME=students
+    PORT=3000
+    # Optional: override path to contacts JSON used by the seed command
+    DATA_JSON_PATH=../contacts_rolls.json
+
+Notes:
+- If `MONGODB_URI` is not provided, the backend defaults to mongodb://127.0.0.1:27017.
+- `DATA_JSON_PATH` is resolved relative to `backend/src` when provided; by default the
+  project expects `contacts_rolls.json` at the repository root.
+
+-------------------------------------------------------------------------------
+4) Quick start (Windows cmd.exe)
+-------------------------------------------------------------------------------
+Open a terminal and run these commands from the repository root:
+
+    REM change into backend folder
+    cd backend
+
+    REM install node modules
+    npm install
+
+    REM (optional) import data from contacts_rolls.json into MongoDB
+    npm run seed
+
+    REM start the API
+    npm start
+
+After start, the API listens on the port configured by `PORT` (default 3000).
+
+Available endpoints:
+- GET /health               -> { ok: true, time: ... }
+- GET /student/:rollNumber  -> lookup single student by roll number
+- GET /students             -> list students (limited, for testing)
+
+-------------------------------------------------------------------------------
+5) Troubleshooting
+-------------------------------------------------------------------------------
+- If the server fails to connect to MongoDB, confirm MongoDB is running and the
+  `MONGODB_URI` is correct. For a local instance, `mongodb://127.0.0.1:27017` is used by default.
+- If `npm run seed` fails, check `contacts_rolls.json` exists at the expected path or set
+  `DATA_JSON_PATH` in your `.env` to point to the JSON file.
+
+-------------------------------------------------------------------------------
+6) Additional notes
+-------------------------------------------------------------------------------
+- The backend is a Node.js project (see `backend/package.json`). There are no Python
+  dependencies; `requirements.txt` here is used as a friendly, human-readable checklist
+  to help new contributors get started.
+
+If you'd like, I can also add a simple `.env.example` file, a Docker Compose entry for MongoDB,
+or a small README.md in `backend/` with this information formatted as Markdown.

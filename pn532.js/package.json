@@ -1,0 +1,120 @@
+{
+  "author": "taichunmin <taichunmin@gmail.com>",
+  "browser": "dist/pn532.min.js",
+  "description": "pn532.js is a JavaScript library for PN532 base on Web Bluetooth and Web Serial.",
+  "homepage": "https://taichunmin.idv.tw/pn532.js/docs/",
+  "jsdelivr": "dist/pn532.min.js",
+  "license": "MIT",
+  "main": "dist/main.js",
+  "module": "src/main.js",
+  "name": "pn532.js",
+  "type": "module",
+  "unpkg": "dist/pn532.min.js",
+  "version": "0.1.19",
+  "bugs": {
+    "url": "https://github.com/taichunmin/pn532.js/issues"
+  },
+  "contributors": [
+    {
+      "email": "taichunmin@gmail.com",
+      "name": "Chunmin Tai",
+      "url": "https://taichunmin.idv.tw"
+    }
+  ],
+  "dependencies": {
+    "web-serial-polyfill": "^1.0.14"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.2.1",
+    "@rollup/plugin-terser": "^0.4.3",
+    "cross-env": "^7.0.3",
+    "dayjs": "^1.11.9",
+    "documentation": "^14.0.2",
+    "dotenv": "^16.3.1",
+    "eslint": "^8.48.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-n": "^16.0.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-pug": "^1.2.5",
+    "fast-glob": "^3.3.1",
+    "finalhandler": "^1.2.0",
+    "html-minifier": "^4.0.0",
+    "jest": "^29.6.4",
+    "jstransformer-sass": "^1.0.0",
+    "livereload": "^0.9.3",
+    "lodash": "^4.17.21",
+    "node-watch": "^0.7.4",
+    "pug": "^3.0.2",
+    "rollup": "^3.28.1",
+    "serialport": "^12.0.0",
+    "serve-static": "^1.15.0",
+    "web-streams-polyfill": "^3.2.1"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./src/main.js",
+      "default": "./dist/main.js"
+    },
+    "./Crypto1.js": {
+      "import": "./src/Crypto1.js",
+      "default": "./dist/Crypto1.js"
+    },
+    "./Packet.js": {
+      "import": "./src/Packet.js",
+      "default": "./dist/Packet.js"
+    },
+    "./plugin/Hf14a.js": {
+      "import": "./src/plugin/Hf14a.js",
+      "default": "./dist/plugin/Hf14a.js"
+    },
+    "./plugin/SerialPortAdapter.js": {
+      "import": "./src/plugin/SerialPortAdapter.js",
+      "default": "./dist/plugin/SerialPortAdapter.js"
+    },
+    "./plugin/LoggerRxTx.js": {
+      "import": "./src/plugin/LoggerRxTx.js",
+      "default": "./dist/plugin/LoggerRxTx.js"
+    },
+    "./plugin/WebbleAdapter.js": {
+      "import": "./src/plugin/WebbleAdapter.js",
+      "default": "./dist/plugin/WebbleAdapter.js"
+    },
+    "./plugin/WebserialAdapter.js": {
+      "import": "./src/plugin/WebserialAdapter.js",
+      "default": "./dist/plugin/WebserialAdapter.js"
+    }
+  },
+  "keywords": [
+    "13.56MHz",
+    "browser",
+    "chrome",
+    "libnfc",
+    "mifare classic",
+    "NFC",
+    "PN532",
+    "RFID",
+    "web bluetooth",
+    "web serial"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taichunmin/pn532.js.git"
+  },
+  "resolutions": {
+    "**/jstransformer-scss": "^2.0.0"
+  },
+  "scripts": {
+    "build": "cross-env DEBUG=app:* node ./index.js && yarn docjs",
+    "dev": "cross-env DEBUG=app:* node ./dev.js",
+    "docjs": "documentation build --config documentation.yml src/** -f html --github -o dist/docs",
+    "lint": "eslint --ext .js,.pug --fix .",
+    "mkcert": "mkcert -key-file ./mkcert/key.pem -cert-file ./mkcert/cert.pem -ecdsa localhost",
+    "repl": "node --experimental-repl-await repl.js",
+    "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js"
+  }
+}
