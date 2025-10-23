@@ -5,6 +5,7 @@ import studentSchema from '../models/schema.js';
 import registeredSchema from '../models/schema1.js';
 import retrieve from './retrieve.js';
 import displayTeam from './display_team.js';
+import nfcControl from './nfc_control.js';
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/retrieve', retrieve);
 app.use('/teams', displayTeam);
+app.use('/nfc', nfcControl);
 
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/lasertag'; 
@@ -44,6 +46,10 @@ async function startServer() {
         // Helper: derive a stable identifier for a student-like object
         function getStudentId(obj) {
             if (!obj) return undefined
+            // For guest players (roll='1'), use mobile number as identifier
+            if ((obj.roll === '1' || obj.rollNumber === '1') && obj.mobile) {
+                return String(obj.mobile)
+            }
             // common fields used in this project: rollNumber, roll
             if (typeof obj.rollNumber !== 'undefined') return String(obj.rollNumber)
             if (typeof obj.roll !== 'undefined') return String(obj.roll)
@@ -88,6 +94,24 @@ async function startServer() {
                 });
             } catch (err) {
                 console.error('Error resetting teams:', err);
+                return res.status(500).json({ 
+                    message: 'Internal server error', 
+                    error: err.message 
+                });
+            }
+        });
+
+        app.get('/current-teams', async (req, res) => {
+            try {
+                return res.status(200).json({ 
+                    team_1,
+                    team_2,
+                    team_no,
+                    team_1_count: team_1.length,
+                    team_2_count: team_2.length
+                });
+            } catch (err) {
+                console.error('Error getting current teams:', err);
                 return res.status(500).json({ 
                     message: 'Internal server error', 
                     error: err.message 
