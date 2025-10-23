@@ -52,7 +52,7 @@ async function startServer() {
         }
 
         // Helper: add student to a team ensuring no duplicates across teams
-        function tryAddToTeam({ targetTeam, otherTeam, studentObj, maxSize = 4 }) {
+        function tryAddToTeam({ targetTeam, otherTeam, studentObj, maxSize = 3 }) {
             const id = getStudentId(studentObj)
             if (!id) return { added: false, reason: 'invalid-id' }
 
@@ -93,7 +93,7 @@ async function startServer() {
                     if (team_no === 1) {
                         const result = tryAddToTeam({ targetTeam: team_1, otherTeam: team_2, studentObj: student })
                         if (!result.added) console.log(`Skip adding student to Team 1: ${result.reason}`)
-                        if (team_1.length === 4) {
+                        if (team_1.length === 3) {
                             team_no = 2;
                             console.log('Team 1 complete:', team_1);
                         }
@@ -102,7 +102,7 @@ async function startServer() {
                     else if (team_no === 2) {
                         const result = tryAddToTeam({ targetTeam: team_2, otherTeam: team_1, studentObj: student })
                         if (!result.added) console.log(`Skip adding student to Team 2: ${result.reason}`)
-                        if (team_2.length === 4) {
+                        if (team_2.length === 3) {
                             console.log('Team 2 complete:', team_2);
 
                             if (game_no === 0) {
@@ -146,7 +146,7 @@ async function startServer() {
                     if (team_no === 1) {
                         const result = tryAddToTeam({ targetTeam: team_1, otherTeam: team_2, studentObj: req.body })
                         if (!result.added) console.log(`Skip adding request body to Team 1: ${result.reason}`)
-                        if (team_1.length === 4) {
+                        if (team_1.length === 3) {
                             team_no = 2;
                             console.log('Team 1 complete:', team_1);
                         }
@@ -155,7 +155,7 @@ async function startServer() {
                     else if (team_no === 2) {
                         const result = tryAddToTeam({ targetTeam: team_2, otherTeam: team_1, studentObj: req.body })
                         if (!result.added) console.log(`Skip adding request body to Team 2: ${result.reason}`)
-                        if (team_2.length === 4) {
+                        if (team_2.length === 3) {
                             console.log('Team 2 complete:', team_2);
 
                             if (game_no === 0) {
