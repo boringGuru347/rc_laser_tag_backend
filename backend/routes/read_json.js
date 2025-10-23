@@ -71,6 +71,30 @@ async function startServer() {
         }
 
 
+        app.post('/reset', async (req, res) => {
+            console.log('Reset request received');
+
+            try {
+                team_1 = [];
+                team_2 = [];
+                team_no = 1;
+
+                console.log('Teams have been reset');
+                return res.status(200).json({ 
+                    message: 'Teams reset successfully',
+                    team_1: [],
+                    team_2: [],
+                    team_no: 1
+                });
+            } catch (err) {
+                console.error('Error resetting teams:', err);
+                return res.status(500).json({ 
+                    message: 'Internal server error', 
+                    error: err.message 
+                });
+            }
+        });
+
         app.post('/register', async (req, res) => {
             console.log('Scan data received:', req.body);
 
