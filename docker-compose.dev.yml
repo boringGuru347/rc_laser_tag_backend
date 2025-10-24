@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7
+    container_name: lasertag-mongodb-dev
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: lasertag
+    volumes:
+      - mongodb_data_dev:/data/db
+    networks:
+      - lasertag-network-dev
+
+  # Backend API (Development mode with hot reload)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: lasertag-backend-dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/lasertag
+      - PORT=3000
+    depends_on:
+      - mongodb
+    networks:
+      - lasertag-network-dev
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run start
+
+  # Frontend UI (Development mode with Vite dev server)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend.dev
+    container_name: lasertag-frontend-dev
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:3000
+    depends_on:
+      - backend
+    networks:
+      - lasertag-network-dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+networks:
+  lasertag-network-dev:
+    driver: bridge
+
+volumes:
+  mongodb_data_dev:
+    driver: local

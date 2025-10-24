@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7
+    container_name: lasertag-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: lasertag
+    volumes:
+      - mongodb_data:/data/db
+      - ./contacts_rolls.json:/docker-entrypoint-initdb.d/contacts_rolls.json:ro
+    networks:
+      - lasertag-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: lasertag-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/lasertag
+      - PORT=3000
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - lasertag-network
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/teams"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend UI
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: lasertag-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - lasertag-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # NFC Reader (optional, requires hardware access)
+  nfc-reader:
+    build:
+      context: .
+      dockerfile: Dockerfile.nfc
+    container_name: lasertag-nfc-reader
+    restart: unless-stopped
+    privileged: true
+    environment:
+      - SERIAL_PATH=/dev/ttyUSB0
+      - BACKEND_URL=http://backend:3000
+    depends_on:
+      - backend
+    networks:
+      - lasertag-network
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB0  # Adjust to your serial port
+    profiles:
+      - nfc  # Only start when explicitly requested
+
+networks:
+  lasertag-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local

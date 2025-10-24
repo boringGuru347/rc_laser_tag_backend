@@ -1,0 +1,25 @@
+# NFC Reader Dockerfile
+FROM node:20-alpine
+
+# Install build dependencies for serialport
+RUN apk add --no-cache python3 make g++ linux-headers udev
+
+# Set working directory
+WORKDIR /app
+
+# Copy pn532.js package files
+COPY pn532.js/package*.json ./
+
+# Install only required dependencies
+RUN npm install lodash@^4.17.21 serialport@^12.0.0 dotenv@^16.3.1
+
+# Copy pn532.js source
+COPY pn532.js/src ./src
+COPY pn532.js/examples ./examples
+
+# Set environment variables (can be overridden)
+ENV SERIAL_PATH=COM5
+ENV BACKEND_URL=http://backend:3000
+
+# Run the NFC reader
+CMD ["node", "examples/nfc-read-memory.js"]
